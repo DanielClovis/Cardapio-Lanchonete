@@ -13,7 +13,31 @@ let opcao = Number(prompt(`
 
 switch (opcao) {
     case 1:
-        alert("Salgados")
+      Salgados()
+        break;
+    case 2:
+        Bebidas()
+        break;
+    case 3:
+        Lanches()
+        break;
+    case 4:
+        Sobremesas()
+        break;
+    case 5:
+        alert("Sair")
+        break;
+
+    default:
+        alert("Nao existe essa opção")
+        break;
+}
+
+
+
+
+function Salgados(){
+      alert("Salgados")
         let sacolaSalgado = Number(prompt(
             `Qual salgado deseja comprar?
         ===============================
@@ -51,9 +75,10 @@ switch (opcao) {
             default:
                 break;
         }
-        break;
-    case 2:
-        alert("Bebidas")
+}
+
+function Bebidas(){
+alert("Bebidas")
         let sacolaBebidas = Number(prompt(`
         Qual Bebida Deseja Comprar?
     =================================
@@ -90,10 +115,10 @@ switch (opcao) {
             default:
                 break;
         }
+}
 
-        break;
-    case 3:
-        alert("Lanches")
+function Lanches(){
+    alert("Lanches")
         let sacolaLanches = Number(prompt(`
             Qual Lanche Deseja Comprar?
         =================================
@@ -131,10 +156,10 @@ switch (opcao) {
             default:
                 break;
         }
-        
-        break;
-    case 4:
-        alert("Sobremesas")
+}
+
+function Sobremesas(){
+    alert("Sobremesas")
         let sacolaSobremesas = Number(prompt(`
             Qual Sobremesa Deseja Comprar?
         ====================================
@@ -172,14 +197,5 @@ switch (opcao) {
             default:
                 break;
         }
-
-
-        break;
-    case 5:
-        alert("Sair")
-        break;
-
-    default:
-        alert("Nao existe essa opção")
-        break;
 }
+

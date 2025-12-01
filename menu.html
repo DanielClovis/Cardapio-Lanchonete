@@ -1,13 +1,220 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardápio com Carrinho</title>
 
-    <script src="menu.js"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .card {
+        margin-top: 40px;
+        width: 420px;
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        font-size: 18px;
+        background: #ff5757;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        background: #d63939;
+    }
+
+    .item {
+        background: #f4f4f4;
+        padding: 12px;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+
+    .item button {
+        float: right;
+        background: #28a745;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .item button:hover {
+        background: #1e7e34;
+    }
+
+    #produtos, #carrinho {
+        margin-top: 20px;
+    }
+
+    .cart-item {
+        background: #ececec;
+        margin: 8px 0;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .remove {
+        float: right;
+        background: #c82333;
+        padding: 6px 10px;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .remove:hover {
+        background: #a10f20;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h2>🍽️ Cardápio Digital</h2>
+
+    <div id="menu">
+        <button class="btn" onclick="mostrarProdutos('salgados')">🥟 Salgados</button>
+        <button class="btn" onclick="mostrarProdutos('bebidas')">🥤 Bebidas</button>
+        <button class="btn" onclick="mostrarProdutos('lanches')">🍔 Lanches</button>
+        <button class="btn" onclick="mostrarProdutos('sobremesas')">🍰 Sobremesas</button>
+    </div>
+
+    <!-- PRODUTOS -->
+    <div id="produtos"></div>
+
+    <!-- CARRINHO -->
+    <h3 style="margin-top: 25px;">🛒 Carrinho</h3>
+    <div id="carrinho"></div>
+
+    <h2 id="total">Total: R$ 0,00</h2>
+
+    <button class="btn" style="background:#28a745" onclick="finalizarCompra()">Finalizar Compra</button>
+
+</div>
+
+<script>
+let total = 0;
+let carrinho = [];
+
+const itens = {
+    salgados: [
+        { nome: "Coxinha", preco: 1 },
+        { nome: "Bolinha de Queijo", preco: 1 },
+        { nome: "Presunto e Queijo", preco: 1 },
+        { nome: "Kibe", preco: 1 }
+    ],
+    bebidas: [
+        { nome: "Coca-Cola", preco: 10 },
+        { nome: "Água", preco: 4 },
+        { nome: "Leite", preco: 15 },
+        { nome: "Fanta Laranja", preco: 8 }
+    ],
+    lanches: [
+        { nome: "X-Tudo", preco: 15 },
+        { nome: "X-Salada", preco: 9 },
+        { nome: "X-Bacon", preco: 9 },
+        { nome: "X-Egg", preco: 9 }
+    ],
+    sobremesas: [
+        { nome: "Milk Shake", preco: 12 },
+        { nome: "Sorvete", preco: 12 },
+        { nome: "Bolo de Chocolate", preco: 20 },
+        { nome: "Brigadeiro", preco: 4 }
+    ]
+};
+
+function mostrarProdutos(categoria) {
+    const lista = itens[categoria];
+    const div = document.getElementById("produtos");
+
+    div.innerHTML = `<h3>${categoria.toUpperCase()}</h3>`;
+
+    lista.forEach((item, i) => {
+        div.innerHTML += `
+            <div class="item">
+                ${item.nome} — R$ ${item.preco}
+                <button onclick="adicionar('${categoria}', ${i})">+</button>
+            </div>
+        `;
+    });
+}
+
+function adicionar(categoria, index) {
+    const item = itens[categoria][index];
+
+    carrinho.push(item);
+    total += item.preco;
+
+    atualizarCarrinho();
+}
+
+function removerItem(index) {
+    total -= carrinho[index].preco;
+    carrinho.splice(index, 1);
+    atualizarCarrinho();
+}
+
+function atualizarCarrinho() {
+    const div = document.getElementById("carrinho");
+    div.innerHTML = "";
+
+    carrinho.forEach((item, i) => {
+        div.innerHTML += `
+            <div class="cart-item">
+                ${item.nome} — R$ ${item.preco}
+                <button class="remove" onclick="removerItem(${i})">X</button>
+            </div>
+        `;
+    });
+
+    document.getElementById("total").innerHTML = `Total: R$ ${total.toFixed(2)}`;
+}
+
+function finalizarCompra() {
+    if (carrinho.length == 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+    }
+
+    let resumo = "🛒 ITENS DA COMPRA:\n\n";
+
+    carrinho.forEach(item => {
+        resumo += `• ${item.nome} — R$ ${item.preco}\n`;
+    });
+
+    resumo += `\nTOTAL: R$ ${total.toFixed(2)}\n\nObrigado pela compra!`;
+
+    alert(resumo);
+
+    // Resetar o carrinho
+    carrinho = [];
+    total = 0;
+    atualizarCarrinho();
+}
+</script>
+
 </body>
 </html>
